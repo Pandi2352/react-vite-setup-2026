@@ -4,6 +4,7 @@
 
 ### **Enterprise-Grade React 19 + Vite 8 + TypeScript + Tailwind CSS v4 Starter Foundation**
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-react--vite--setup--2026.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://react-vite-setup-2026.vercel.app/dashboard)
 ![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Vite 8](https://img.shields.io/badge/Vite-8.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -14,6 +15,8 @@
 <p align="center">
   <b>Production-ready frontend architecture with a 30-Color Scheme & 20-Google Font engine, zero-flash theme persistence, custom SVG charts, full-width form wizard, and domain-driven design.</b>
 </p>
+
+[🌐 **Explore Live Demo Application**](https://react-vite-setup-2026.vercel.app/dashboard)
 
 </div>
 
@@ -38,6 +41,7 @@
 
 | Feature | Description | Status |
 | :--- | :--- | :---: |
+| **🌐 Live Demo Deployment** | Deployed live on Vercel Edge Network | [**Live Link**](https://react-vite-setup-2026.vercel.app/dashboard) |
 | **🎨 30 Color Schemes Engine** | Live slide-over theme customizer drawer with HSL token injection | ✅ Ready |
 | **🔤 20 Google Web Fonts** | Dynamic font loader supporting Sans, Serif, Display & Mono | ✅ Ready |
 | **🌓 Zero-Flash Theme System** | Head IIFE script + 0ms repaint transition suppressor | ✅ Ready |
@@ -123,9 +127,7 @@ Built directly with native React SVG elements for maximum performance and 0kb bu
 
 ---
 
-## 🚀 Quick Start & Git Push Guide
-
-### 1. Local Setup Commands
+## 🚀 Quick Start & Development Commands
 
 ```bash
 # Install dependencies
@@ -139,32 +141,6 @@ npm run build
 
 # Preview production build
 npm run preview
-```
-
----
-
-### 2. Push Code to GitHub Repository
-
-Run these commands in your terminal to initialize git and push to your new GitHub repository `https://github.com/Pandi2352/react-vite-setup-2026`:
-
-```bash
-# Initialize git repository
-git init
-
-# Stage all files
-git add .
-
-# Create initial commit
-git commit -m "feat: initial commit for react-vite-setup-2026 enterprise template"
-
-# Rename default branch to main
-git branch -M main
-
-# Add remote GitHub repository
-git remote add origin https://github.com/Pandi2352/react-vite-setup-2026.git
-
-# Push code to GitHub
-git push -u origin main
 ```
 
 ---
