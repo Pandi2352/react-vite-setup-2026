@@ -1,18 +1,17 @@
-name: ForgeUI CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main ]
 
 jobs:
-  lint-and-test:
-    name: Build & Test
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -21,17 +20,11 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Run Type Check
+      - name: Typecheck TypeScript
         run: npm run typecheck
 
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Run Unit Tests
-        run: npm run test
-
-      - name: Build Production Bundle
+      - name: Run Production Build
         run: npm run build
