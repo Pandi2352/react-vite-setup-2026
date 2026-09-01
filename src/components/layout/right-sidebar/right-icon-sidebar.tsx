@@ -5,7 +5,7 @@ import {
   Activity,
   Globe,
   Palette,
-  HelpCircle,
+  BookOpen,
 } from 'lucide-react';
 import { useUIStore } from '@/store/ui-store';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -50,6 +50,8 @@ export const RightIconSidebar: React.FC = () => {
     },
   ];
 
+  const isDocsActive = activeRightPanel === 'docs';
+
   return (
     <aside
       aria-label="Right Tools Activity Bar"
@@ -85,10 +87,12 @@ export const RightIconSidebar: React.FC = () => {
                 {item.indicator}
 
                 {item.badge && (
-                  <span className={cn(
-                    'absolute -top-0.5 right-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full text-[8px] font-bold px-0.5 transition-colors',
-                    isActive ? 'text-primary' : 'text-muted-foreground'
-                  )}>
+                  <span
+                    className={cn(
+                      'absolute -top-0.5 right-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full text-[8px] font-bold px-0.5 transition-colors',
+                      isActive ? 'text-primary' : 'text-muted-foreground'
+                    )}
+                  >
                     {item.badge}
                   </span>
                 )}
@@ -98,15 +102,24 @@ export const RightIconSidebar: React.FC = () => {
         })}
       </div>
 
-      {/* Bottom Section: Quick Help */}
+      {/* Bottom Section: Platform Documentation & Shortcuts */}
       <div className="flex flex-col items-center">
-        <Tooltip content="Forge Documentation & Keyboard Shortcuts" position="left">
+        <Tooltip content="Platform Documentation & Feature Guide" position="left">
           <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-            aria-label="Documentation and Shortcuts"
+            onClick={() => toggleRightPanel('docs')}
+            className={cn(
+              'group relative flex h-9 w-9 items-center justify-center transition-colors duration-150 cursor-pointer',
+              isDocsActive ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-primary'
+            )}
+            aria-label="Platform Documentation and Features"
           >
-            <HelpCircle className="h-4 w-4" />
+            {isDocsActive && (
+              <span className="absolute -left-1 top-2 bottom-2 w-0.5 rounded-r-full bg-primary" />
+            )}
+            <div className="transition-transform duration-150 group-hover:scale-110">
+              <BookOpen className="h-5 w-5" />
+            </div>
           </button>
         </Tooltip>
       </div>

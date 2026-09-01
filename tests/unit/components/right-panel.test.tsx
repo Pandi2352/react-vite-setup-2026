@@ -58,6 +58,12 @@ describe('Right Panel State in UIStore', () => {
       useUIStore.getState().toggleRightPanel('i18n');
     });
     expect(useUIStore.getState().activeRightPanel).toBe('i18n');
+
+    // Toggling docs switches to docs
+    act(() => {
+      useUIStore.getState().toggleRightPanel('docs');
+    });
+    expect(useUIStore.getState().activeRightPanel).toBe('docs');
   });
 
   it('clamps right panel width between min and max bounds', () => {
