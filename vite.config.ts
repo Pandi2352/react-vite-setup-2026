@@ -72,8 +72,8 @@ export default GIT_INFO;
 
   return {
     name: 'git-info-generator',
-    // Runs synchronously before the server/build starts
-    buildStart() {
+    // `config` hook fires synchronously for BOTH `vite` (dev) and `vite build` (production)
+    config() {
       generateFile();
     },
     configureServer(server: ViteDevServer) {

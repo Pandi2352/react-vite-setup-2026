@@ -14,7 +14,7 @@
 ![License MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 <p align="center">
-  <b>Production-ready frontend architecture with Dual Resizable Sidebars, 48px Right Activity Dock, AI Engineering Chatbox (Files/Folders context), Model Context Protocol (MCP) Integration Explorer, 30-Color Scheme & 20-Google Font engine, neutral theme scrollbars, zero-dependency SVG charts, and domain-driven design.</b>
+  <b>Production-ready frontend architecture with Dual Resizable Sidebars, 48px Right Activity Dock, AI Engineering Chatbox, MCP Integration Explorer, Production-Ready Audit Logs, Live Git Release Telemetry Badge, 30-Color Scheme & 20-Google Font engine, zero-dependency SVG charts, and domain-driven design.</b>
 </p>
 
 [🌐 **Explore Live Demo Application**](https://react-vite-setup-2026.vercel.app/dashboard)
@@ -26,10 +26,13 @@
 ## 📑 Table of Contents
 
 - [🌟 Comprehensive Feature Matrix](#-comprehensive-feature-matrix)
+- [🔖 Live Git Release Telemetry Badge](#-live-git-release-telemetry-badge)
+- [🔐 Production-Ready Audit Logs](#-production-ready-audit-logs)
 - [↔️ Left Resizable Navigation Sidebar](#️-left-resizable-navigation-sidebar)
 - [🎯 Right Activity Dock (48px Compact Bar)](#-right-activity-dock-48px-compact-bar)
 - [🤖 AI Engineering Copilot (Chatbox)](#-ai-engineering-copilot-chatbox)
 - [🔌 Model Context Protocol (MCP) Integration](#-model-context-protocol-mcp-integration)
+- [📊 Live Telemetry & Core Web Vitals Profiler](#-live-telemetry--core-web-vitals-profiler)
 - [🎨 30 Curated Color Schemes Catalog](#-30-curated-color-schemes-catalog)
 - [🔤 20 Google Fonts Dynamic Loader](#-20-google-fonts-dynamic-loader)
 - [📊 Zero-Dependency SVG Chart Suite](#-zero-dependency-svg-chart-suite)
@@ -49,6 +52,8 @@
 | Category | Feature | Description | Status |
 | :--- | :--- | :--- | :---: |
 | **🌐 Deployment** | **Live Edge Deployment** | Optimized Vercel Edge build with gzip compression & asset hashing | ✅ Ready |
+| **🔖 Git Telemetry** | **Live Commit Badge** | Navbar badge showing real-time branch, commit hash, date, author & repo link | ✅ Ready |
+| **🔐 Audit Logs** | **Production-Ready Audit Trail** | Searchable, filterable security audit log with severity levels, user tracking & export | ✅ Ready |
 | **↔️ Left Sidebar** | **60fps Resizable Handle** | Drag-to-resize (180px–480px), snap auto-collapse (`<130px`), keyboard step control & `localStorage` persistence | ✅ Ready |
 | **🎨 Sidebar Glow** | **Theme-Reactive Hover** | Sidebar navigation items dynamically glow and illuminate with active theme colors | ✅ Ready |
 | **📜 Scrollbars** | **Neutral Translucent Bars** | Subtle scrollbars that remain constant and elegant across all 30 color schemes | ✅ Ready |
@@ -66,6 +71,89 @@
 | **⌨️ Quick Actions** | **Command Palette** | `Cmd+K` / `Ctrl+K` modal to quickly navigate, search commands, and trigger actions | ✅ Ready |
 | **🛡️ Security & RBAC** | **Permission Guard** | Role-based component rendering for `SUPER_ADMIN`, `DEVELOPER`, `VIEWER` | ✅ Ready |
 | **🚨 Error Handling** | **Axios Interceptor** | Automatic toast alerts on HTTP 400-500 errors + custom 403, 404, 500 error pages | ✅ Ready |
+
+---
+
+## 🔖 Live Git Release Telemetry Badge
+
+A real-time commit badge embedded in the navbar that always shows the **current commit** — branch, short hash, date, author, and a clickable link to GitHub.
+
+### How It Works
+
+The system uses a **3-layer architecture** with zero "unknown" fallbacks:
+
+```
+Layer 1 (always available):  git-info.generated.ts  ← static import, written by Vite plugin
+Layer 2 (dev auto-refresh):  GET /__git_info__       ← live endpoint, fetched on page load
+Layer 3 (manual refresh):    🔄 Refresh button       ← in badge popover, fetches on demand
+```
+
+The `git-info-generator` Vite plugin runs `git log` commands at startup and writes the result to `src/components/common/git-release/git-info.generated.ts` — a real TypeScript file that's imported directly. This means the badge **always** has data, even before any fetch completes.
+
+### Commit Badge Update Scenarios
+
+| Situation | Badge Updates Via |
+| :--- | :--- |
+| **`npm run dev` restart** | Vite plugin regenerates `git-info.generated.ts` on startup |
+| **`git commit` → browser refresh** | Auto-fetches `/__git_info__` (live endpoint) on next page load |
+| **`git commit` → no page refresh needed** | Click **🔄** in the badge popover to fetch instantly |
+| **`npm run build`** | Git info baked into the production bundle at build time |
+| **No git / git command fails** | Graceful message — never shows "unknown" |
+
+### Badge Popover Features
+
+- 🌿 **Branch name** with `GitBranch` icon
+- `#` **Short commit hash** (7 chars) with `GitCommit` icon
+- 📅 **Commit date** formatted as `YYYY-MM-DD`
+- 👤 **Author name**
+- 💬 **Full commit message**
+- 📋 **Copy full hash** to clipboard (one click)
+- 🔗 **View on GitHub** — opens the exact commit URL
+- 🏠 **Repository link** — opens the repo root
+- 🔄 **Refresh button** — fetches latest commit without page reload (dev only)
+
+### File Reference
+
+| File | Role |
+| :--- | :--- |
+| [`vite.config.ts`](./vite.config.ts) | Vite plugin: generates `git-info.generated.ts` on every startup & exposes `/__git_info__` |
+| [`git-info.generated.ts`](./src/components/common/git-release/git-info.generated.ts) | Auto-generated — **do not edit** — listed in `.gitignore` |
+| [`use-git-release.ts`](./src/components/common/git-release/use-git-release.ts) | React hook: imports generated file, optionally refreshes from live endpoint |
+| [`git-release-badge.tsx`](./src/components/common/git-release/git-release-badge.tsx) | Navbar badge component with popover |
+
+> **Note:** `git-info.generated.ts` is in `.gitignore` — it is regenerated on every `npm run dev` or `npm run build`. Never commit it manually.
+
+---
+
+## 🔐 Production-Ready Audit Logs
+
+A complete security audit trail with enterprise-grade filtering, searching, and export capabilities available at `/audit-logs`.
+
+### Features
+
+- **Real-Time Event Stream**: Animated live feed indicator with pulsating dot — shows events as they happen.
+- **Full-Text Search**: Instant search across action names, user emails, resource types, IP addresses, and descriptions.
+- **Multi-Dimension Filtering**:
+  - **Severity**: `Critical` / `High` / `Medium` / `Low` / `Info`
+  - **Action Type**: Authentication, Data Access, User Management, System Config, API Access, Security Events
+  - **Status**: `Success` / `Failed` / `Pending`
+  - **Date Range**: From / To date pickers
+  - **User Email**: Filter by specific user
+- **Summary KPI Cards**: Total events, critical count, failed count, and unique users — all computed live from the current filtered dataset.
+- **Paginated Log Table**: Compact, sortable table with severity badges, status chips, user avatars, action icons, timestamps, IP addresses, and resource context.
+- **Detail Drawer**: Slide-over panel showing full event metadata: request ID, session ID, geo-location, user agent, HTTP method, endpoint, duration, and change diff.
+- **Export**: Download filtered log entries as CSV with one click.
+- **Active Filter Tags**: Visual pill chips for every active filter with individual clear buttons.
+
+### Severity Color System
+
+| Level | Color | Use Case |
+| :--- | :--- | :--- |
+| `critical` | 🔴 Red | Account takeover, mass deletion, privilege escalation |
+| `high` | 🟠 Orange | Failed logins, unauthorized access attempts |
+| `medium` | 🟡 Yellow | Password changes, role modifications |
+| `low` | 🔵 Blue | Profile updates, settings changes |
+| `info` | ⚪ Grey | Login success, routine data access |
 
 ---
 
@@ -265,6 +353,7 @@ Press `Cmd+K` (macOS) or `Ctrl+K` (Windows/Linux) from anywhere to open the moda
 npm install
 
 # 2. Start local development server with Vite HMR
+#    → Vite plugin auto-generates git-info.generated.ts with current commit
 npm run dev
 
 # 3. Run TypeScript typecheck across all files & tests
@@ -274,10 +363,26 @@ npm run typecheck
 npm test
 
 # 5. Build for production (TypeScript compile + Vite bundle)
+#    → git commit info is baked into the bundle at build time
 npm run build
 
 # 6. Preview production bundle locally
 npm run preview
+```
+
+### Git Release Badge — Update Guide
+
+```bash
+# After committing new code, the badge updates automatically via:
+
+# Option A: Restart dev server (regenerates git-info.generated.ts)
+npm run dev
+
+# Option B: Refresh the browser page (auto-fetches /__git_info__ live endpoint)
+# → No restart needed, just Ctrl+R / F5
+
+# Option C: Click the 🔄 Refresh button inside the badge popover
+# → Updates badge instantly without any page reload
 ```
 
 ---
