@@ -2,6 +2,7 @@ import React from 'react';
 import {
   BotMessageSquare,
   Blocks,
+  Activity,
   Palette,
   HelpCircle,
 } from 'lucide-react';
@@ -26,6 +27,14 @@ export const RightIconSidebar: React.FC = () => {
       label: 'Model Context Protocol (MCP) Tools',
       icon: <Blocks className="h-5 w-5" />,
       badge: '4',
+    },
+    {
+      id: 'telemetry' as const,
+      label: 'Live Telemetry & Web Vitals (60fps)',
+      icon: <Activity className="h-5 w-5" />,
+      indicator: (
+        <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_4px_rgba(59,130,246,0.8)]" />
+      ),
     },
     {
       id: 'theme' as const,

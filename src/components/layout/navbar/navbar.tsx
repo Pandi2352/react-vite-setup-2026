@@ -4,6 +4,8 @@ import { useUIStore } from '@/store/ui-store';
 import { MobileMenuButton } from './mobile-menu-button';
 import { NotificationMenu } from './notification-menu';
 import { UserMenu } from './user-menu';
+import { LiveClock } from '@/components/common/clock';
+import { LiveLocation } from '@/components/common/location';
 import { Tooltip } from '@/components/ui/tooltip';
 
 export const Navbar: React.FC = () => {
@@ -48,6 +50,16 @@ export const Navbar: React.FC = () => {
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
+        {/* Free Live Geolocation & Weather */}
+        <div className="hidden lg:flex items-center">
+          <LiveLocation />
+        </div>
+
+        {/* Live Clock with Global Timezone Region Switcher */}
+        <div className="hidden sm:flex items-center">
+          <LiveClock />
+        </div>
+
         <Tooltip content="Global Search" position="bottom">
           <button
             onClick={toggleCommandPalette}

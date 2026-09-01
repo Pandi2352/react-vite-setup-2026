@@ -23,7 +23,7 @@ describe('Right Panel State in UIStore', () => {
     expect(state.isRightResizing).toBe(false);
   });
 
-  it('toggles chat, mcp and theme panels correctly', () => {
+  it('toggles chat, mcp, theme and telemetry panels correctly', () => {
     act(() => {
       useUIStore.getState().toggleRightPanel('chat');
     });
@@ -46,6 +46,12 @@ describe('Right Panel State in UIStore', () => {
       useUIStore.getState().toggleRightPanel('theme');
     });
     expect(useUIStore.getState().activeRightPanel).toBe('theme');
+
+    // Toggling telemetry switches to telemetry
+    act(() => {
+      useUIStore.getState().toggleRightPanel('telemetry');
+    });
+    expect(useUIStore.getState().activeRightPanel).toBe('telemetry');
   });
 
   it('clamps right panel width between min and max bounds', () => {

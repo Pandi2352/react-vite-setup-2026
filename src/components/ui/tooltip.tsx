@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 
@@ -7,6 +7,7 @@ export interface TooltipProps {
   children: React.ReactElement;
   position?: 'top' | 'bottom' | 'left' | 'right';
   className?: string;
+  disabled?: boolean;
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -14,14 +15,24 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   position = 'top',
   className,
+  disabled = false,
 }) => {
   const [visible, setVisible] = useState(false);
   const [coords, setCoords] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  if (!content) return children;
+  // Close tooltip on global scroll or window blur
+  useEffect(() => {
+    if (!visible) return;
+    const handleScroll = () => setVisible(false);
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll, true);
+  }, [visible]);
 
-  const handleMouseEnter = () => {
+  if (!content || disabled) return children;
+
+  const showTooltip = () => {
+    if (disabled) return;
     if (triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       let top = 0;
@@ -47,6 +58,10 @@ export const Tooltip: React.FC<TooltipProps> = ({
     setVisible(true);
   };
 
+  const hideTooltip = () => {
+    setVisible(false);
+  };
+
   const positionStyles = {
     top: '-translate-x-1/2 -translate-y-full animate-in fade-in zoom-in-95 slide-in-from-bottom-1',
     bottom: '-translate-x-1/2 animate-in fade-in zoom-in-95 slide-in-from-top-1',
@@ -65,13 +80,14 @@ export const Tooltip: React.FC<TooltipProps> = ({
     <div
       ref={triggerRef}
       className={cn('relative inline-flex items-center justify-center', className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={() => setVisible(false)}
-      onFocus={handleMouseEnter}
-      onBlur={() => setVisible(false)}
+      onMouseEnter={showTooltip}
+      onMouseLeave={hideTooltip}
+      onMouseDown={hideTooltip}
+      onClick={hideTooltip}
     >
       {children}
       {visible &&
+        !disabled &&
         createPortal(
           <div
             role="tooltip"

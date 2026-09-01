@@ -55,6 +55,7 @@
 | **🎯 Right Dock** | **48px Activity Dock** | Ultra-compact dock with live pulse indicators for AI Copilot, MCP Tools & Themes | ✅ Ready |
 | **🤖 AI Chatbox** | **File & Folder Context** | AI chat with project directory attachments (`src/`, `package.json`), prompt pills & model switcher | ✅ Ready |
 | **🔌 MCP Integration** | **Third-Party Tool Suite** | Full Model Context Protocol explorer: Servers, Tool Runner, JSON Schema inspector, Config & Logs | ✅ Ready |
+| **📊 Live Telemetry** | **Web Vitals & FPS Profiler** | Real-time 60fps graph, JS Heap memory monitor, Core Web Vitals speedometers (LCP, CLS, INP, FCP), DOM depth & Network waterfall | ✅ Ready |
 | **🪟 Unified Drawers** | **Backdrop Blur Drawers** | Resizable right panels (320px–750px) with `backdrop-blur-[2px]` that uniformly blurs the whole screen | ✅ Ready |
 | **🎨 Color Engine** | **30 Color Schemes** | Instant CSS variable switching with Tailwind v4 HSL tokens | ✅ Ready |
 | **🔤 Typography** | **20 Google Web Fonts** | Sans, Serif, Display, and Monospace families loaded dynamically | ✅ Ready |
@@ -126,6 +127,22 @@ A complete third-party Model Context Protocol suite supporting AI Agent tool exe
   - Standard Model Context Protocol JSON config generator with 1-click copy for Antigravity IDE, Claude Desktop, and VS Code.
 - **Tab 4: Real-time Event Logs**:
   - Live activity stream monitoring heartbeat pings, schema discoveries, and tool calls.
+
+---
+
+## 📊 Live Telemetry & Core Web Vitals Profiler
+
+A developer-first diagnostic suite delivering real-time performance and web vitals telemetry:
+
+- **Live 60fps & Memory Graphs**: Animated real-time SVG streaming charts tracking Frame Rate (FPS) against the 16.6ms frame budget and JS Heap Memory allocation.
+- **Core Web Vitals Speedometers**: Visual circular gauge meters for:
+  - **LCP** (Largest Contentful Paint) — Target: `<2.5s`
+  - **CLS** (Cumulative Layout Shift) — Target: `<0.1`
+  - **INP** (Interaction to Next Paint) — Target: `<200ms`
+  - **FCP** (First Contentful Paint) — Target: `<1.8s`
+  - **TTFB** (Time to First Byte) — Target: `<800ms`
+- **DOM Tree & Listener Analyzer**: Live DOM node counter, tree depth analyzer, and event listener density inspector.
+- **Network Waterfall & Gzip Efficiency**: Bundle transfer breakdown comparing raw vs gzipped bytes with timing bars.
 
 ---
 

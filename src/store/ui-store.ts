@@ -59,11 +59,11 @@ const getInitialRightPanelWidth = (): number => {
   return DEFAULT_RIGHT_PANEL_WIDTH;
 };
 
-const getInitialActiveRightPanel = (): 'chat' | 'mcp' | 'theme' | null => {
+const getInitialActiveRightPanel = (): 'chat' | 'mcp' | 'theme' | 'telemetry' | null => {
   if (typeof window === 'undefined') return null;
   try {
     const saved = localStorage.getItem(STORAGE_KEY_RIGHT_PANEL);
-    if (saved === 'chat' || saved === 'mcp' || saved === 'theme') {
+    if (saved === 'chat' || saved === 'mcp' || saved === 'theme' || saved === 'telemetry') {
       return saved;
     }
   } catch {
@@ -72,7 +72,7 @@ const getInitialActiveRightPanel = (): 'chat' | 'mcp' | 'theme' | null => {
   return null;
 };
 
-export type RightPanelType = 'chat' | 'mcp' | 'theme' | null;
+export type RightPanelType = 'chat' | 'mcp' | 'theme' | 'telemetry' | null;
 
 interface UIState {
   sidebarWidth: number;
@@ -108,7 +108,7 @@ interface UIState {
 
   // Right Panel actions
   setActiveRightPanel: (panel: RightPanelType) => void;
-  toggleRightPanel: (panel: 'chat' | 'mcp' | 'theme') => void;
+  toggleRightPanel: (panel: 'chat' | 'mcp' | 'theme' | 'telemetry') => void;
   setRightPanelWidth: (width: number) => void;
   setIsRightResizing: (isResizing: boolean) => void;
   resetRightPanelWidth: () => void;

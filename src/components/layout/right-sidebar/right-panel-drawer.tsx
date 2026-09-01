@@ -2,6 +2,7 @@ import React from 'react';
 import { useUIStore } from '@/store/ui-store';
 import { ChatPanel } from '@/features/chat';
 import { MCPPanel } from '@/features/mcp';
+import { TelemetryPanel } from '@/features/telemetry';
 import { ThemePanel } from '@/components/theme/theme-panel';
 import { RightResizeHandle } from './right-resize-handle';
 import { cn } from '@/lib/utils';
@@ -15,6 +16,7 @@ export const RightPanelDrawer: React.FC = () => {
     <div className="flex flex-col h-full w-full bg-transparent overflow-hidden">
       {activeRightPanel === 'chat' && <ChatPanel />}
       {activeRightPanel === 'mcp' && <MCPPanel />}
+      {activeRightPanel === 'telemetry' && <TelemetryPanel />}
       {activeRightPanel === 'theme' && <ThemePanel />}
     </div>
   );
