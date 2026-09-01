@@ -27,38 +27,56 @@ const getGitReleaseInfo = () => {
     const repoUrl = 'https://github.com/Pandi2352/react-vite-setup-2026';
 
     return {
-      commitHash: commitHash || '74404ba42af652d5f0c988a10108f55992cf030d',
-      commitShort: commitShort || '74404ba',
+      commitHash: commitHash || 'unknown',
+      commitShort: commitShort || 'unknown',
       commitDate: commitDate || new Date().toISOString(),
       commitMsg: commitMsg || 'Release update',
-      commitAuthor: commitAuthor || 'pandi',
+      commitAuthor: commitAuthor || 'unknown',
       branch: branch || 'main',
       repoUrl,
-      commitUrl: `${repoUrl}/commit/${commitHash || '74404ba'}`,
+      commitUrl: `${repoUrl}/commit/${commitShort || commitHash || 'main'}`,
     };
   } catch {
     const repoUrl = 'https://github.com/Pandi2352/react-vite-setup-2026';
-    const commitHash = '74404ba42af652d5f0c988a10108f55992cf030d';
     return {
-      commitHash,
-      commitShort: '74404ba',
-      commitDate: '2026-09-01 15:04:47 +0530',
-      commitMsg: 'feat: add documentation features panel with tech stack and keyboard shortcuts support',
-      commitAuthor: 'pandi',
+      commitHash: 'unknown',
+      commitShort: 'unknown',
+      commitDate: new Date().toISOString(),
+      commitMsg: 'Git info unavailable',
+      commitAuthor: 'unknown',
       branch: 'main',
       repoUrl,
-      commitUrl: `${repoUrl}/commit/${commitHash}`,
+      commitUrl: `${repoUrl}/commits/main`,
     };
   }
 };
 
-const gitInfo = getGitReleaseInfo();
+// Bake git info at BUILD time for production
+const buildTimeGitInfo = getGitReleaseInfo();
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    // Dev-only plugin: live git info API endpoint so badge always reflects latest commit
+    {
+      name: 'live-git-info',
+      apply: 'serve',
+      configureServer(server) {
+        server.middlewares.use('/__git_info__', (_req, res) => {
+          // Read fresh git info on every request — no server restart needed
+          const info = getGitReleaseInfo();
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          res.end(JSON.stringify(info));
+        });
+      },
+    },
+  ],
   define: {
-    __APP_GIT_INFO__: JSON.stringify(gitInfo),
+    // Only used in production build — dev fetches live via API
+    __APP_GIT_INFO__: JSON.stringify(buildTimeGitInfo),
   },
   resolve: {
     alias: {
