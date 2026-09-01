@@ -6,6 +6,8 @@ import { NotificationMenu } from './notification-menu';
 import { UserMenu } from './user-menu';
 import { LiveClock } from '@/components/common/clock';
 import { LiveLocation } from '@/components/common/location';
+import { GitReleaseBadge } from '@/components/common/git-release';
+import { IconButton } from '@/components/ui/icon-button';
 import { Tooltip } from '@/components/ui/tooltip';
 
 export const Navbar: React.FC = () => {
@@ -16,16 +18,15 @@ export const Navbar: React.FC = () => {
       {/* Left Section */}
       <div className="flex items-center gap-3">
         {/* Desktop Sidebar Collapse Toggle */}
-        <Tooltip content={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'} position="bottom">
-          <button
-            type="button"
-            onClick={toggleSidebarCollapsed}
-            className="hidden md:flex h-9 w-9 items-center justify-center text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-            aria-label={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-          >
-            {sidebarCollapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
-          </button>
-        </Tooltip>
+        <IconButton
+          icon={sidebarCollapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
+          aria-label={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          tooltip={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          variant="ghost"
+          size="md"
+          onClick={toggleSidebarCollapsed}
+          className="hidden md:flex"
+        />
 
         <MobileMenuButton />
       </div>
@@ -50,6 +51,11 @@ export const Navbar: React.FC = () => {
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
+        {/* Live Git Release Commit Telemetry */}
+        <div className="hidden xl:flex items-center">
+          <GitReleaseBadge variant="detailed" />
+        </div>
+
         {/* Free Live Geolocation & Weather */}
         <div className="hidden lg:flex items-center">
           <LiveLocation />
@@ -60,15 +66,16 @@ export const Navbar: React.FC = () => {
           <LiveClock />
         </div>
 
-        <Tooltip content="Global Search" position="bottom">
-          <button
-            onClick={toggleCommandPalette}
-            className="md:hidden h-9 w-9 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-            aria-label="Search"
-          >
-            <Search className="h-4 w-4" />
-          </button>
-        </Tooltip>
+        {/* Mobile Search Button */}
+        <IconButton
+          icon={<Search className="h-4 w-4" />}
+          aria-label="Search modules and commands"
+          tooltip="Global Search"
+          variant="ghost"
+          size="md"
+          onClick={toggleCommandPalette}
+          className="md:hidden"
+        />
 
         <NotificationMenu />
         <UserMenu />

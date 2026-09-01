@@ -28,7 +28,7 @@ export const UserMenu: React.FC = () => {
     <div ref={menuRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center gap-2.5 p-1 transition-colors cursor-pointer focus:outline-none"
+        className="group flex items-center gap-2 px-2 py-1 rounded-lg border border-transparent hover:border-border/80 hover:bg-muted/60 transition-all cursor-pointer focus:outline-none select-none"
         aria-label="User Profile Menu"
         aria-expanded={isOpen}
       >
@@ -40,7 +40,7 @@ export const UserMenu: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-60 rounded-md border border-border bg-card p-2 shadow-2xl animate-in zoom-in-95 z-50">
+        <div className="absolute right-0 mt-2 w-64 rounded-xl border border-border bg-card p-2 shadow-2xl animate-in zoom-in-95 z-50">
           <div className="p-3 border-b border-border mb-1">
             <p className="text-sm font-bold text-foreground truncate">{user.name}</p>
             <p className="text-xs text-muted-foreground truncate">{user.email}</p>

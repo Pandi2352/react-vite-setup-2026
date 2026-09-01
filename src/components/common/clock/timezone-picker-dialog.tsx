@@ -6,6 +6,7 @@ import {
 } from './clock.types';
 import { Search, Globe, Clock, Check, X, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -78,15 +79,14 @@ export const TimezonePickerDialog: React.FC<TimezonePickerDialogProps> = ({
               <p className="text-[10px] text-muted-foreground">Select global region & clock formats</p>
             </div>
           </div>
-          <Button
+          <IconButton
+            icon={<X className="h-3.5 w-3.5" />}
+            aria-label="Close time & timezone dialog"
+            tooltip="Close"
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-            aria-label="Close dialog"
-          >
-            <X className="h-3.5 w-3.5" />
-          </Button>
+          />
         </div>
 
         {/* Live Preview Card */}

@@ -3,7 +3,7 @@ import { LogOut } from 'lucide-react';
 import { useAuthStore } from '@/store/auth-store';
 import { useUIStore } from '@/store/ui-store';
 import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { cn } from '@/lib/utils';
 import { Tooltip } from '@/components/ui/tooltip';
 
@@ -29,15 +29,15 @@ export const SidebarFooter: React.FC = () => {
         </Tooltip>
 
         {!sidebarCollapsed && (
-          <Button
+          <IconButton
+            icon={<LogOut className="h-4 w-4" />}
+            aria-label="Sign Out"
+            tooltip="Sign Out"
             variant="ghost"
             size="sm"
             onClick={logout}
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive shrink-0"
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </Button>
+            className="text-muted-foreground hover:text-destructive"
+          />
         )}
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, File, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from './button';
+import { IconButton } from './icon-button';
 
 export interface FileUploadProps {
   label?: string;
@@ -134,18 +134,18 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                <Button
-                  type="button"
+                <IconButton
+                  icon={<X className="h-3.5 w-3.5" />}
+                  aria-label={`Remove file ${file.name}`}
+                  tooltip="Remove file"
+                  size="xs"
                   variant="ghost"
-                  size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     removeFile(idx);
                   }}
-                  className="h-6 w-6 p-0 hover:text-destructive"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </Button>
+                  className="hover:text-destructive"
+                />
               </div>
             </div>
           ))}

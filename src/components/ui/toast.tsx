@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
+import { IconButton } from './icon-button';
 import { cn } from '@/lib/utils';
 
 export type ToastType = 'success' | 'error' | 'info';
@@ -61,12 +62,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               {t.type === 'info' && <Info className="h-5 w-5 text-blue-400 shrink-0" />}
               <span>{t.message}</span>
             </div>
-            <button
+            <IconButton
+              icon={<X className="h-3.5 w-3.5" />}
+              aria-label="Dismiss notification"
+              size="xs"
+              variant="ghost"
               onClick={() => removeToast(t.id)}
-              className="opacity-70 hover:opacity-100 transition-opacity ml-4 cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-            </button>
+              className="ml-4 opacity-70 hover:opacity-100 hover:bg-white/10 text-inherit"
+            />
           </div>
         ))}
       </div>

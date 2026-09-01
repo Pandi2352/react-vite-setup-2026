@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuthStore } from '@/store/auth-store';
 import { DashboardBanner } from '../components/dashboard-banner';
-import { DashboardKpiGrid } from '../components/dashboard-kpi-grid';
-import { DashboardCharts } from '../components/dashboard-charts';
+import { DashboardKpiGrid } from '../components/kpi-cards/dashboard-kpi-grid';
+import { DashboardChartsGrid } from '../components/charts/dashboard-charts-grid';
 import { DashboardActivityFeed } from '../components/dashboard-activity-feed';
 
 export const DashboardPage: React.FC = () => {
@@ -12,7 +12,7 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       <DashboardBanner userName={user?.name} />
       <DashboardKpiGrid />
-      <DashboardCharts />
+      <DashboardChartsGrid />
       <DashboardActivityFeed />
     </div>
   );

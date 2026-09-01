@@ -4,5 +4,4 @@ export * from './permission-guard';
 export * from './seo-head';
 export * from './clock';
 export * from './location';
-
-
+export * from './git-release';

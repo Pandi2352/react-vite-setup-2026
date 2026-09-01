@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from './button';
+import { IconButton } from './icon-button';
 
 export interface DialogProps {
   isOpen: boolean;
@@ -58,9 +58,14 @@ export const Dialog: React.FC<DialogProps> = ({
             <h2 className="text-lg font-semibold text-foreground">{title}</h2>
             {description && <p className="text-sm text-muted-foreground mt-0.5">{description}</p>}
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-8 w-8 p-0 rounded-full">
-            <X className="h-4 w-4" />
-          </Button>
+          <IconButton
+            icon={<X className="h-4 w-4" />}
+            aria-label="Close dialog"
+            variant="ghost"
+            size="sm"
+            shape="circle"
+            onClick={onClose}
+          />
         </div>
 
         <div className="py-4">{children}</div>

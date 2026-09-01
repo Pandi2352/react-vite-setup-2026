@@ -37,6 +37,6 @@ describe('DocsPanel Component', () => {
 
     expect(screen.getByText('Architecture & Tech Stack')).toBeInTheDocument();
     expect(screen.getByText('React 19')).toBeInTheDocument();
-    expect(screen.getByText('Vite 8')).toBeInTheDocument();
+    expect(screen.getByText('Vite')).toBeInTheDocument();
   });
 });

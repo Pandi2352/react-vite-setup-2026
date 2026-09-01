@@ -7,6 +7,7 @@ import { TelemetryNetworkWaterfall } from './telemetry-network-waterfall';
 import { Activity, Gauge, BarChart2, Layers, Network, Play, Pause, X } from 'lucide-react';
 import { useUIStore } from '@/store/ui-store';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { Tooltip } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -57,16 +58,14 @@ export const TelemetryPanel: React.FC = () => {
           </Tooltip>
 
           {/* Close Drawer Button */}
-          <Tooltip content="Close panel" position="bottom">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveRightPanel(null)}
-              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            icon={<X className="h-3.5 w-3.5" />}
+            aria-label="Close telemetry panel"
+            tooltip="Close panel"
+            variant="ghost"
+            size="sm"
+            onClick={() => setActiveRightPanel(null)}
+          />
         </div>
       </div>
 

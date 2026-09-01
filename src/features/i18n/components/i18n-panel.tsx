@@ -6,6 +6,7 @@ import { I18nDictionaryInspector } from './i18n-dictionary-inspector';
 import { Globe, ArrowRightLeft, BookOpen, X, Sparkles } from 'lucide-react';
 import { useUIStore } from '@/store/ui-store';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -33,15 +34,14 @@ export const I18nPanel: React.FC = () => {
           </div>
         </div>
 
-        <Button
+        <IconButton
+          icon={<X className="h-3.5 w-3.5" />}
+          aria-label="Close i18n panel"
+          tooltip="Close panel"
           variant="ghost"
           size="sm"
           onClick={() => setActiveRightPanel(null)}
-          className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-          aria-label="Close panel"
-        >
-          <X className="h-3.5 w-3.5" />
-        </Button>
+        />
       </div>
 
       {/* Navigation Tabs */}

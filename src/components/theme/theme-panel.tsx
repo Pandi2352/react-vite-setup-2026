@@ -5,6 +5,7 @@ import { useUIStore } from '@/store/ui-store';
 import { COLOR_SCHEMES_CATALOG } from '@/lib/theme';
 import { GOOGLE_FONTS_LIST } from '@/lib/fonts';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -68,16 +69,14 @@ export const ThemePanel: React.FC = () => {
             </Button>
           </Tooltip>
 
-          <Tooltip content="Close panel" position="bottom">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveRightPanel(null)}
-              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            icon={<X className="h-3.5 w-3.5" />}
+            aria-label="Close theme panel"
+            tooltip="Close panel"
+            variant="ghost"
+            size="sm"
+            onClick={() => setActiveRightPanel(null)}
+          />
         </div>
       </div>
 

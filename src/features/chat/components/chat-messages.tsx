@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Bot, User, Copy, Check, Sparkles, RotateCw, FileCode, Folder } from 'lucide-react';
 import { ChatMessage } from '../types/chat.types';
 import { Badge } from '@/components/ui/badge';
-import { Tooltip } from '@/components/ui/tooltip';
+import { IconButton } from '@/components/ui/icon-button';
 import { cn } from '@/lib/utils';
 
 export interface ChatMessagesProps {
@@ -124,30 +124,32 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
                     )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Tooltip content={copiedId === message.id ? 'Copied!' : 'Copy response'} position="top">
-                      <button
-                        type="button"
-                        onClick={() => handleCopy(message.content, message.id)}
-                        className="h-6 w-6 rounded flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                      >
-                        {copiedId === message.id ? (
+                    <IconButton
+                      icon={
+                        copiedId === message.id ? (
                           <Check className="h-3 w-3 text-emerald-500" />
                         ) : (
                           <Copy className="h-3 w-3" />
-                        )}
-                      </button>
-                    </Tooltip>
+                        )
+                      }
+                      aria-label="Copy response"
+                      tooltip={copiedId === message.id ? 'Copied!' : 'Copy response'}
+                      tooltipPosition="top"
+                      size="xs"
+                      variant="ghost"
+                      onClick={() => handleCopy(message.content, message.id)}
+                    />
 
                     {onRegenerate && (
-                      <Tooltip content="Regenerate response" position="top">
-                        <button
-                          type="button"
-                          onClick={() => onRegenerate(message.id)}
-                          className="h-6 w-6 rounded flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                        >
-                          <RotateCw className="h-3 w-3" />
-                        </button>
-                      </Tooltip>
+                      <IconButton
+                        icon={<RotateCw className="h-3 w-3" />}
+                        aria-label="Regenerate response"
+                        tooltip="Regenerate response"
+                        tooltipPosition="top"
+                        size="xs"
+                        variant="ghost"
+                        onClick={() => onRegenerate(message.id)}
+                      />
                     )}
                   </div>
                 </div>

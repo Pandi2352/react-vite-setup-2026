@@ -5,9 +5,9 @@ import { UserItem } from '../types/user.types';
 import { UserModal } from '../components/user-modal';
 import { DataTable, TableColumn } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar } from '@/components/ui/avatar';
-import { Tooltip } from '@/components/ui/tooltip';
 import { PermissionGuard } from '@/components/common/permission-guard';
 import { ErrorState } from '@/components/feedback/error-state';
 import { formatDate } from '@/utils/formatters';
@@ -197,16 +197,16 @@ export const UsersPage: React.FC = () => {
       width: '90px',
       render: (row) => (
         <PermissionGuard permission={PERMISSIONS.USERS_DELETE}>
-          <Tooltip content="Delete User" position="left">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => deleteUser(row.id)}
-              className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive cursor-pointer"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            icon={<Trash2 className="h-4 w-4" />}
+            aria-label={`Delete user ${row.name}`}
+            tooltip="Delete User"
+            tooltipPosition="left"
+            variant="ghost"
+            size="sm"
+            onClick={() => deleteUser(row.id)}
+            className="text-muted-foreground hover:text-destructive"
+          />
         </PermissionGuard>
       ),
     },

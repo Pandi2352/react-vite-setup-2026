@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Bell, CheckCheck, Trash2, Info, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { useUIStore } from '@/store/ui-store';
 import { useNotificationStore } from '@/store/notification-store';
+import { IconButton } from '@/components/ui/icon-button';
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -30,15 +31,15 @@ export const NotificationMenu: React.FC = () => {
           type="button"
           onClick={toggleNotifications}
           className={cn(
-            'group relative flex h-9 w-9 items-center justify-center transition-colors duration-150 cursor-pointer',
+            'group relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors duration-150 cursor-pointer hover:bg-muted/60',
             notificationsOpen
-              ? 'text-primary font-semibold'
-              : 'text-muted-foreground hover:text-primary'
+              ? 'text-primary bg-muted/70 font-semibold ring-1 ring-primary/30'
+              : 'text-muted-foreground hover:text-foreground'
           )}
           aria-label="Notifications"
           aria-expanded={notificationsOpen}
         >
-          <Bell className="h-5 w-5 transition-colors" />
+          <Bell className="h-4.5 w-4.5 transition-colors" />
           {unreadCount > 0 && (
             <span className="absolute top-1 right-1 flex h-3.5 min-w-[14px] px-1 items-center justify-center rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground">
               {unreadCount > 99 ? '99+' : unreadCount}
@@ -49,7 +50,7 @@ export const NotificationMenu: React.FC = () => {
 
       {/* Notification Dropdown Popover */}
       {notificationsOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-md border border-border bg-card p-4 shadow-2xl animate-in zoom-in-95 z-50">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-border bg-card p-4 shadow-2xl animate-in zoom-in-95 z-50">
           <div className="flex items-center justify-between pb-3 border-b border-border mb-3">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-foreground">Notifications</h3>
@@ -69,15 +70,15 @@ export const NotificationMenu: React.FC = () => {
               >
                 <CheckCheck className="h-3.5 w-3.5 mr-1" /> Read all
               </Button>
-              <Button
+              <IconButton
+                icon={<Trash2 className="h-3.5 w-3.5" />}
+                aria-label="Clear all notifications"
+                tooltip="Clear all notifications"
                 variant="ghost"
                 size="sm"
                 onClick={clearAll}
-                className="h-7 px-2 text-[11px] text-muted-foreground hover:text-destructive"
-                title="Clear all notifications"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-              </Button>
+                className="text-muted-foreground hover:text-destructive"
+              />
             </div>
           </div>
 

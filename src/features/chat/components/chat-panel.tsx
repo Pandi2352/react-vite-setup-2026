@@ -11,8 +11,7 @@ import { ChatMessages } from './chat-messages';
 import { ChatInput } from './chat-input';
 import { useUIStore } from '@/store/ui-store';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tooltip } from '@/components/ui/tooltip';
+import { IconButton } from '@/components/ui/icon-button';
 
 const MODEL_OPTIONS: AIModelOption[] = [
   { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', provider: 'Google', badge: 'Fastest', contextWindow: '2M tokens' },
@@ -160,27 +159,24 @@ export const ChatPanel: React.FC = () => {
             )}
           </div>
 
-          <Tooltip content="Clear conversation" position="bottom">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClearChat}
-              className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            icon={<Trash2 className="h-3.5 w-3.5" />}
+            aria-label="Clear conversation"
+            tooltip="Clear conversation"
+            variant="ghost"
+            size="sm"
+            onClick={handleClearChat}
+            className="text-muted-foreground hover:text-destructive"
+          />
 
-          <Tooltip content="Close panel" position="bottom">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setActiveRightPanel(null)}
-              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-3.5 w-3.5" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            icon={<X className="h-3.5 w-3.5" />}
+            aria-label="Close chat panel"
+            tooltip="Close panel"
+            variant="ghost"
+            size="sm"
+            onClick={() => setActiveRightPanel(null)}
+          />
         </div>
       </div>
 

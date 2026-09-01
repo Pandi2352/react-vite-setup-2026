@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, File, X, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from './button';
+import { IconButton } from './icon-button';
 
 export interface DropzoneProps {
   onFileSelect?: (file: File | null) => void;
@@ -131,14 +131,15 @@ export const Dropzone: React.FC<DropzoneProps> = ({
 
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-            <Button
+            <IconButton
+              icon={<X className="h-4 w-4" />}
+              aria-label="Remove uploaded file"
+              tooltip="Remove file"
               variant="ghost"
               size="sm"
               onClick={removeFile}
-              className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+              className="text-muted-foreground hover:text-destructive"
+            />
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@ import React from 'react';
 import { FileText, Folder, Code, Image, X } from 'lucide-react';
 import { ChatAttachment } from '../types/chat.types';
 import { Badge } from '@/components/ui/badge';
+import { IconButton } from '@/components/ui/icon-button';
 import { cn } from '@/lib/utils';
 
 export interface ChatAttachmentsProps {
@@ -51,14 +52,15 @@ export const ChatAttachments: React.FC<ChatAttachmentsProps> = ({
               dir
             </Badge>
           )}
-          <button
-            type="button"
-            onClick={() => onRemove(item.id)}
-            className="h-4 w-4 rounded-full flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer ml-0.5"
+          <IconButton
+            icon={<X className="h-2.5 w-2.5" />}
             aria-label={`Remove ${item.name}`}
-          >
-            <X className="h-3 w-3" />
-          </button>
+            size="xs"
+            shape="circle"
+            variant="ghost"
+            onClick={() => onRemove(item.id)}
+            className="h-4 w-4 ml-0.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+          />
         </div>
       ))}
     </div>

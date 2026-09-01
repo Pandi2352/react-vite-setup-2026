@@ -67,10 +67,10 @@ export const RightIconSidebar: React.FC = () => {
                 type="button"
                 onClick={() => toggleRightPanel(item.id)}
                 className={cn(
-                  'group relative flex h-9 w-9 items-center justify-center transition-colors duration-150 cursor-pointer',
+                  'group relative flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-150 cursor-pointer hover:bg-muted/60',
                   isActive
-                    ? 'text-primary font-semibold'
-                    : 'text-muted-foreground hover:text-primary'
+                    ? 'text-primary bg-muted/80 font-semibold ring-1 ring-primary/30'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
                 aria-label={item.label}
               >
@@ -79,7 +79,7 @@ export const RightIconSidebar: React.FC = () => {
                   <span className="absolute -left-1 top-2 bottom-2 w-0.5 rounded-r-full bg-primary" />
                 )}
 
-                <div className="transition-transform duration-150 group-hover:scale-110">
+                <div className="transition-transform duration-150 group-hover:scale-105">
                   {item.icon}
                 </div>
 
@@ -109,16 +109,16 @@ export const RightIconSidebar: React.FC = () => {
             type="button"
             onClick={() => toggleRightPanel('docs')}
             className={cn(
-              'group relative flex h-9 w-9 items-center justify-center transition-colors duration-150 cursor-pointer',
-              isDocsActive ? 'text-primary font-semibold' : 'text-muted-foreground hover:text-primary'
+              'group relative flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-150 cursor-pointer hover:bg-muted/60',
+              isDocsActive ? 'text-primary bg-muted/80 font-semibold ring-1 ring-primary/30' : 'text-muted-foreground hover:text-foreground'
             )}
             aria-label="Platform Documentation and Features"
           >
             {isDocsActive && (
               <span className="absolute -left-1 top-2 bottom-2 w-0.5 rounded-r-full bg-primary" />
             )}
-            <div className="transition-transform duration-150 group-hover:scale-110">
-              <BookOpen className="h-5 w-5" />
+            <div className="transition-transform duration-150 group-hover:scale-105">
+              <BookOpen className="h-4.5 w-4.5" />
             </div>
           </button>
         </Tooltip>

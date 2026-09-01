@@ -1,7 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { Button } from '../button';
-import { Tooltip } from '../tooltip';
+import { IconButton } from '../icon-button';
 import { CustomSelect } from '../select';
 
 export interface DataTablePaginationProps {
@@ -57,58 +56,50 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
       </div>
 
       {/* Right: Navigation Controls */}
-      <div className="flex items-center gap-2 whitespace-nowrap shrink-0">
-        <Tooltip content="First Page" position="top">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage === 1 || isLoading}
-            onClick={() => onPageChange(1)}
-            className="h-8 w-8 p-0 shrink-0"
-          >
-            <ChevronsLeft className="h-4 w-4" />
-          </Button>
-        </Tooltip>
+      <div className="flex items-center gap-1.5 whitespace-nowrap shrink-0">
+        <IconButton
+          icon={<ChevronsLeft className="h-4 w-4" />}
+          aria-label="First page"
+          tooltip="First Page"
+          variant="outline"
+          size="sm"
+          disabled={currentPage === 1 || isLoading}
+          onClick={() => onPageChange(1)}
+        />
 
-        <Tooltip content="Previous Page" position="top">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage === 1 || isLoading}
-            onClick={() => onPageChange(currentPage - 1)}
-            className="h-8 w-8 p-0 shrink-0"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-        </Tooltip>
+        <IconButton
+          icon={<ChevronLeft className="h-4 w-4" />}
+          aria-label="Previous page"
+          tooltip="Previous Page"
+          variant="outline"
+          size="sm"
+          disabled={currentPage === 1 || isLoading}
+          onClick={() => onPageChange(currentPage - 1)}
+        />
 
         <span className="px-2 font-medium whitespace-nowrap shrink-0 text-muted-foreground">
           Page <strong className="text-foreground">{currentPage}</strong> of <strong>{totalPages}</strong>
         </span>
 
-        <Tooltip content="Next Page" position="top">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage >= totalPages || isLoading}
-            onClick={() => onPageChange(currentPage + 1)}
-            className="h-8 w-8 p-0 shrink-0"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </Tooltip>
+        <IconButton
+          icon={<ChevronRight className="h-4 w-4" />}
+          aria-label="Next page"
+          tooltip="Next Page"
+          variant="outline"
+          size="sm"
+          disabled={currentPage >= totalPages || isLoading}
+          onClick={() => onPageChange(currentPage + 1)}
+        />
 
-        <Tooltip content="Last Page" position="top">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={currentPage >= totalPages || isLoading}
-            onClick={() => onPageChange(totalPages)}
-            className="h-8 w-8 p-0 shrink-0"
-          >
-            <ChevronsRight className="h-4 w-4" />
-          </Button>
-        </Tooltip>
+        <IconButton
+          icon={<ChevronsRight className="h-4 w-4" />}
+          aria-label="Last page"
+          tooltip="Last Page"
+          variant="outline"
+          size="sm"
+          disabled={currentPage >= totalPages || isLoading}
+          onClick={() => onPageChange(totalPages)}
+        />
       </div>
     </div>
   );
