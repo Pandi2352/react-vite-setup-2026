@@ -3,6 +3,7 @@ import { useUIStore } from '@/store/ui-store';
 import { ChatPanel } from '@/features/chat';
 import { MCPPanel } from '@/features/mcp';
 import { TelemetryPanel } from '@/features/telemetry';
+import { I18nPanel } from '@/features/i18n';
 import { ThemePanel } from '@/components/theme/theme-panel';
 import { RightResizeHandle } from './right-resize-handle';
 import { cn } from '@/lib/utils';
@@ -17,6 +18,7 @@ export const RightPanelDrawer: React.FC = () => {
       {activeRightPanel === 'chat' && <ChatPanel />}
       {activeRightPanel === 'mcp' && <MCPPanel />}
       {activeRightPanel === 'telemetry' && <TelemetryPanel />}
+      {activeRightPanel === 'i18n' && <I18nPanel />}
       {activeRightPanel === 'theme' && <ThemePanel />}
     </div>
   );

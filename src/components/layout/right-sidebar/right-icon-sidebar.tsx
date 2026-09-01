@@ -3,6 +3,7 @@ import {
   BotMessageSquare,
   Blocks,
   Activity,
+  Globe,
   Palette,
   HelpCircle,
 } from 'lucide-react';
@@ -35,6 +36,12 @@ export const RightIconSidebar: React.FC = () => {
       indicator: (
         <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-blue-500 shadow-[0_0_4px_rgba(59,130,246,0.8)]" />
       ),
+    },
+    {
+      id: 'i18n' as const,
+      label: 'i18n & RTL Layout Suite (8 Locales)',
+      icon: <Globe className="h-5 w-5" />,
+      badge: '8',
     },
     {
       id: 'theme' as const,
