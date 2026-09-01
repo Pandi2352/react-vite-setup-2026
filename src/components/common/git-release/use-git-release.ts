@@ -1,61 +1,58 @@
-import { useState, useEffect } from 'react';
-import { GitReleaseInfo } from './git-release.types';
-
-declare const __APP_GIT_INFO__: GitReleaseInfo | undefined;
-
-// Baked at build time — used in production or as initial SSR value
-const BUILD_TIME_GIT_INFO: GitReleaseInfo =
-  typeof __APP_GIT_INFO__ !== 'undefined' && __APP_GIT_INFO__
-    ? __APP_GIT_INFO__
-    : {
-        commitHash: 'unknown',
-        commitShort: 'unknown',
-        commitDate: new Date().toISOString(),
-        commitMsg: 'Git info unavailable',
-        commitAuthor: 'unknown',
-        branch: 'main',
-        repoUrl: 'https://github.com/Pandi2352/react-vite-setup-2026',
-        commitUrl: 'https://github.com/Pandi2352/react-vite-setup-2026/commits/main',
-      };
-
 /**
- * In development, fetches live git info from the Vite dev server middleware
- * (`/__git_info__`) on every mount — so the badge always shows the *latest*
- * commit even if you committed after starting `npm run dev`.
+ * useGitRelease hook
  *
- * In production, returns the info baked at build time.
+ * Reads from `git-info.generated.ts` which is written by the Vite plugin
+ * in vite.config.ts at the start of every `npm run dev` or `npm run build`.
+ *
+ * This means the badge always shows the commit that was HEAD when the
+ * dev server last started (or when the production build was made).
+ *
+ * After you commit and want the badge to update WITHOUT restarting the dev
+ * server, the Vite plugin also exposes `/__git_info__` — call refreshGitInfo()
+ * from anywhere to pick up the latest commit on the fly.
  */
-export const useGitRelease = (): GitReleaseInfo => {
-  const [gitInfo, setGitInfo] = useState<GitReleaseInfo>(BUILD_TIME_GIT_INFO);
+import { useState, useCallback, useEffect } from 'react';
+import { GitReleaseInfo } from './git-release.types';
+// Static import — always populated by the Vite plugin, never "unknown"
+import GIT_INFO from './git-info.generated';
 
-  useEffect(() => {
-    // Only fetch live in dev — production always uses baked build-time info
+export { GIT_INFO as DEFAULT_GIT_INFO };
+
+export const useGitRelease = (): GitReleaseInfo & { refresh: () => Promise<void>; isRefreshing: boolean } => {
+  const [gitInfo, setGitInfo] = useState<GitReleaseInfo>(GIT_INFO);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refresh = useCallback(async () => {
+    // Only try the live endpoint in dev mode
     if (import.meta.env.MODE !== 'development') return;
 
-    let cancelled = false;
-
-    const fetchLive = async () => {
-      try {
-        const res = await fetch('/__git_info__', {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache' },
-        });
-        if (!res.ok) return;
+    setIsRefreshing(true);
+    try {
+      const res = await fetch('/__git_info__', {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' },
+      });
+      if (res.ok) {
         const data: GitReleaseInfo = await res.json();
-        if (!cancelled) {
+        // Only update if we got real data (not "unknown")
+        if (data.commitHash && data.commitHash !== 'HEAD') {
           setGitInfo(data);
         }
-      } catch {
-        // Silently fall back to baked info if fetch fails
       }
-    };
-
-    fetchLive();
-
-    return () => {
-      cancelled = true;
-    };
+    } catch {
+      // Silently keep showing last known good data
+    } finally {
+      setIsRefreshing(false);
+    }
   }, []);
 
-  return gitInfo;
+  // Auto-refresh once on mount in dev (picks up commits made since last server start)
+  useEffect(() => {
+    if (import.meta.env.MODE === 'development') {
+      refresh();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return { ...gitInfo, refresh, isRefreshing };
 };

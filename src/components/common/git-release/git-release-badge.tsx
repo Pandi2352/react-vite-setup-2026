@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { RotateCw } from 'lucide-react';
 import { useGitRelease } from './use-git-release';
 import {
   GitCommit,
@@ -26,7 +27,7 @@ export const GitReleaseBadge: React.FC<GitReleaseBadgeProps> = ({
   className,
   variant = 'compact',
 }) => {
-  const gitInfo = useGitRelease();
+  const { refresh, isRefreshing, ...gitInfo } = useGitRelease();
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,6 +112,15 @@ export const GitReleaseBadge: React.FC<GitReleaseBadgeProps> = ({
               <Badge variant="success" className="text-[9px] font-mono px-1.5 py-0">
                 Live Build
               </Badge>
+              <IconButton
+                icon={<RotateCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />}
+                aria-label="Refresh git info"
+                tooltip="Fetch latest commit"
+                variant="ghost"
+                size="sm"
+                onClick={refresh}
+                disabled={isRefreshing}
+              />
               <IconButton
                 icon={<X className="h-3.5 w-3.5" />}
                 aria-label="Close Git release dialog"
