@@ -127,6 +127,9 @@ export const AuditLogsPage: React.FC = () => {
         data={logs}
         selectable={true}
         exportable={true}
+        reorderableColumns={true}
+        resizableColumns={true}
+        reorderableRows={true}
         exportFileName="audit-logs-export"
         searchPlaceholder="Search audit logs by event, user, or IP address..."
         getRowId={(row) => row.id}

@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
-import { DataTableProps } from './types';
+import { useState, useMemo, useEffect } from 'react';
+import { DataTableProps, TableColumn } from './types';
 import { DataTableToolbar } from './data-table-toolbar';
 import { DataTableHeader } from './data-table-header';
 import { DataTableBody } from './data-table-body';
 import { DataTablePagination } from './data-table-pagination';
 
 export function DataTable<T>({
-  columns,
-  data,
+  columns: initialColumns,
+  data: initialData,
   isLoading = false,
   isError = false,
   onRetry,
@@ -22,6 +22,14 @@ export function DataTable<T>({
   exportFileName = 'table-export',
   emptyTitle,
   emptyDescription,
+
+  // Reorder & Resize props
+  reorderableColumns = false,
+  resizableColumns = false,
+  reorderableRows = false,
+  onColumnReorder,
+  onColumnResize,
+  onRowReorder,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -30,9 +38,45 @@ export function DataTable<T>({
   const [pageSize, setPageSize] = useState(initialPageSize);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
+  // Columns & Order State
+  const [columns, setColumns] = useState<TableColumn<T>[]>(initialColumns);
+  useEffect(() => {
+    setColumns(initialColumns);
+  }, [initialColumns]);
+
+  // Column Widths Mapping State
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    initialColumns.forEach((c) => {
+      if (typeof c.width === 'number') initial[c.key] = c.width;
+      else if (typeof c.width === 'string' && c.width.endsWith('px')) {
+        initial[c.key] = parseInt(c.width, 10);
+      }
+    });
+    return initial;
+  });
+
+  // Reorderable Data State
+  const [currentData, setCurrentData] = useState<T[]>(initialData);
+  useEffect(() => {
+    setCurrentData(initialData);
+  }, [initialData]);
+
+  // Track if layout was modified
+  const hasCustomLayout = useMemo(() => {
+    if (Object.keys(columnWidths).length > 0) return true;
+    if (columns.some((c, idx) => c.key !== initialColumns[idx]?.key)) return true;
+    return false;
+  }, [columnWidths, columns, initialColumns]);
+
+  const handleResetLayout = () => {
+    setColumns(initialColumns);
+    setColumnWidths({});
+  };
+
   // Column Visibility State
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
-    () => new Set(columns.filter((c) => c.visible !== false).map((c) => c.key))
+    () => new Set(initialColumns.filter((c) => c.visible !== false).map((c) => c.key))
   );
 
   const toggleColumnVisibility = (key: string) => {
@@ -47,15 +91,48 @@ export function DataTable<T>({
     });
   };
 
+  // Column Reorder Handler
+  const handleColumnReorder = (draggedKey: string, targetKey: string) => {
+    const fromIdx = columns.findIndex((c) => c.key === draggedKey);
+    const toIdx = columns.findIndex((c) => c.key === targetKey);
+    if (fromIdx === -1 || toIdx === -1) return;
+
+    const newColumns = [...columns];
+    const [dragged] = newColumns.splice(fromIdx, 1);
+    newColumns.splice(toIdx, 0, dragged);
+
+    setColumns(newColumns);
+    if (onColumnReorder) onColumnReorder(newColumns);
+  };
+
+  // Column Resize Handler
+  const handleColumnResize = (columnKey: string, width: number) => {
+    setColumnWidths((prev) => ({
+      ...prev,
+      [columnKey]: width,
+    }));
+    if (onColumnResize) onColumnResize(columnKey, width);
+  };
+
+  // Row Reorder Handler
+  const handleRowReorder = (fromIndex: number, toIndex: number) => {
+    const newData = [...currentData];
+    const [dragged] = newData.splice(fromIndex, 1);
+    newData.splice(toIndex, 0, dragged);
+
+    setCurrentData(newData);
+    if (onRowReorder) onRowReorder(newData, fromIndex, toIndex);
+  };
+
   // Search Filter
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data;
-    return data.filter((row) =>
+    if (!searchTerm) return currentData;
+    return currentData.filter((row) =>
       Object.values(row as Record<string, any>).some((val) =>
         String(val).toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  }, [data, searchTerm]);
+  }, [currentData, searchTerm]);
 
   // Sort
   const sortedData = useMemo(() => {
@@ -102,14 +179,17 @@ export function DataTable<T>({
 
   const handleSelectRow = (row: T) => {
     const id = getRowId(row);
-    const newSelected = new Set(selectedIds);
-    if (newSelected.has(id)) newSelected.delete(id);
-    else newSelected.add(id);
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
 
-    setSelectedIds(newSelected);
-    if (onSelectionChange) {
-      onSelectionChange(data.filter((r) => newSelected.has(getRowId(r))));
-    }
+      if (onSelectionChange) {
+        const selected = currentData.filter((r) => next.has(getRowId(r)));
+        onSelectionChange(selected);
+      }
+      return next;
+    });
   };
 
   const clearSelection = () => {
@@ -117,39 +197,36 @@ export function DataTable<T>({
     if (onSelectionChange) onSelectionChange([]);
   };
 
-  // CSV Export Utility
-  const handleExportCSV = () => {
-    const exportData = selectedIds.size > 0
-      ? data.filter((r) => selectedIds.has(getRowId(r)))
-      : sortedData;
+  const selectedRows = useMemo(
+    () => currentData.filter((r) => selectedIds.has(getRowId(r))),
+    [currentData, selectedIds, getRowId]
+  );
 
-    const visibleCols = columns.filter((c) => visibleColumns.has(c.key));
-    const headers = visibleCols.map((c) => c.header).join(',');
-    const rows = exportData.map((row) =>
-      visibleCols.map((c) => `"${String((row as any)[c.key] ?? '').replace(/"/g, '""')}"`).join(',')
+  const isAllSelected =
+    paginatedData.length > 0 && paginatedData.every((r) => selectedIds.has(getRowId(r)));
+  const isSomeSelected =
+    paginatedData.some((r) => selectedIds.has(getRowId(r))) && !isAllSelected;
+
+  const exportCSV = () => {
+    const activeCols = columns.filter((c) => visibleColumns.has(c.key));
+    const headerRow = activeCols.map((c) => `"${c.header}"`).join(',');
+    const rows = sortedData.map((row) =>
+      activeCols.map((col) => `"${String((row as any)[col.key] || '')}"`).join(',')
     );
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headerRow, ...rows].join('\n');
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${exportFileName}-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `${exportFileName}-${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const selectedRows = useMemo(
-    () => data.filter((r) => selectedIds.has(getRowId(r))),
-    [data, selectedIds, getRowId]
-  );
-
-  const isAllSelected = paginatedData.length > 0 && paginatedData.every((r) => selectedIds.has(getRowId(r)));
-  const isSomeSelected = paginatedData.some((r) => selectedIds.has(getRowId(r)));
-
   return (
-    <div className="w-full space-y-3">
-      {/* Toolbar */}
+    <div className="w-full space-y-4">
+      {/* Search & Actions Toolbar */}
       <DataTableToolbar
         columns={columns}
         visibleColumns={visibleColumns}
@@ -164,16 +241,19 @@ export function DataTable<T>({
         onClearSelection={clearSelection}
         bulkActions={bulkActions}
         exportable={exportable}
-        onExportCSV={handleExportCSV}
+        onExportCSV={exportCSV}
+        onResetLayout={handleResetLayout}
+        hasCustomLayout={hasCustomLayout}
       />
 
-      {/* Main Table Wrapper */}
-      <div className="rounded-md border border-border bg-card overflow-hidden shadow-sm">
-        <div className="overflow-x-auto relative">
-          <table className="w-full min-w-[1800px] text-left text-sm border-collapse whitespace-nowrap">
+      {/* Main Grid Wrapper */}
+      <div className="rounded-xl border border-border/80 bg-card overflow-hidden shadow-sm">
+        <div className="overflow-x-auto relative min-h-[300px] custom-scrollbar">
+          <table className="w-full text-left border-collapse">
             <DataTableHeader
               columns={columns}
               visibleColumns={visibleColumns}
+              columnWidths={columnWidths}
               sortColumn={sortColumn}
               sortDirection={sortDirection}
               onSort={handleSort}
@@ -181,10 +261,17 @@ export function DataTable<T>({
               isAllSelected={isAllSelected}
               isSomeSelected={isSomeSelected}
               onSelectAll={handleSelectAll}
+              reorderableColumns={reorderableColumns}
+              resizableColumns={resizableColumns}
+              reorderableRows={reorderableRows}
+              onColumnReorder={handleColumnReorder}
+              onColumnResize={handleColumnResize}
             />
+
             <DataTableBody
               columns={columns}
               visibleColumns={visibleColumns}
+              columnWidths={columnWidths}
               data={paginatedData}
               isLoading={isLoading}
               isError={isError}
@@ -197,24 +284,27 @@ export function DataTable<T>({
               onClearFilters={() => setSearchTerm('')}
               emptyTitle={emptyTitle}
               emptyDescription={emptyDescription}
+              reorderableRows={reorderableRows}
+              onRowReorder={handleRowReorder}
             />
           </table>
         </div>
 
-        {/* Footer Pagination */}
-        <DataTablePagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          totalRecords={sortedData.length}
-          pageSizeOptions={pageSizeOptions}
-          onPageChange={setCurrentPage}
-          onPageSizeChange={(newSize) => {
-            setPageSize(newSize);
-            setCurrentPage(1);
-          }}
-          isLoading={isLoading}
-        />
+        {/* Pagination Controls */}
+        {!isLoading && !isError && sortedData.length > 0 && (
+          <DataTablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            pageSizeOptions={pageSizeOptions}
+            totalRecords={sortedData.length}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setCurrentPage(1);
+            }}
+          />
+        )}
       </div>
     </div>
   );

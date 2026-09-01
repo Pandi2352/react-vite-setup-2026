@@ -5,7 +5,9 @@ export interface TableColumn<T> {
   header: string;
   sortable?: boolean;
   visible?: boolean;
-  width?: string;
+  width?: string | number;
+  minWidth?: number;
+  maxWidth?: number;
   render?: (row: T) => React.ReactNode;
 }
 
@@ -26,4 +28,12 @@ export interface DataTableProps<T> {
   exportFileName?: string;
   emptyTitle?: string;
   emptyDescription?: string;
+
+  // Drag, Drop, Reorder & Resize features
+  reorderableColumns?: boolean;
+  resizableColumns?: boolean;
+  reorderableRows?: boolean;
+  onColumnReorder?: (columns: TableColumn<T>[]) => void;
+  onColumnResize?: (columnKey: string, width: number) => void;
+  onRowReorder?: (newData: T[], fromIndex: number, toIndex: number) => void;
 }

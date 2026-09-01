@@ -236,7 +236,7 @@ export const UsersPage: React.FC = () => {
         </PermissionGuard>
       </div>
 
-      {/* Enterprise Data Table with 15 Columns */}
+      {/* Enterprise Data Table with Drag-Drop Reordering & Column Resizing */}
       <DataTable<UserItem>
         columns={columns}
         data={users}
@@ -245,6 +245,9 @@ export const UsersPage: React.FC = () => {
         onRetry={refetch}
         selectable={true}
         exportable={true}
+        reorderableColumns={true}
+        resizableColumns={true}
+        reorderableRows={true}
         exportFileName="users-full-export"
         searchPlaceholder="Search users by name, email, department, location, or IP..."
         getRowId={(user) => user.id}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Download, X } from 'lucide-react';
+import { Search, Download, X, RotateCcw } from 'lucide-react';
 import { Input } from '../input';
 import { Button } from '../button';
 import { Tooltip } from '../tooltip';
@@ -18,6 +18,8 @@ export interface DataTableToolbarProps<T> {
   bulkActions?: (selectedRows: T[], clearSelection: () => void) => React.ReactNode;
   exportable?: boolean;
   onExportCSV?: () => void;
+  onResetLayout?: () => void;
+  hasCustomLayout?: boolean;
 }
 
 export function DataTableToolbar<T>({
@@ -32,6 +34,8 @@ export function DataTableToolbar<T>({
   bulkActions,
   exportable = true,
   onExportCSV,
+  onResetLayout,
+  hasCustomLayout = false,
 }: DataTableToolbarProps<T>) {
   const selectedCount = selectedRows.length;
 
@@ -59,6 +63,20 @@ export function DataTableToolbar<T>({
 
         {/* Right Tools */}
         <div className="flex items-center gap-2">
+          {hasCustomLayout && onResetLayout && (
+            <Tooltip content="Reset column order and widths" position="top">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onResetLayout}
+                className="h-9 px-2.5 text-xs text-muted-foreground hover:text-primary"
+                leftIcon={<RotateCcw className="h-3.5 w-3.5" />}
+              >
+                Reset Grid
+              </Button>
+            </Tooltip>
+          )}
+
           {exportable && onExportCSV && (
             <Tooltip content="Export CSV" position="top">
               <Button
