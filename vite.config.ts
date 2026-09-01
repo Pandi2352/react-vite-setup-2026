@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath, URL } from 'url';
 import { execSync } from 'child_process';
-import { writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath as fu } from 'url';
 
@@ -49,36 +48,30 @@ const getGitReleaseInfo = () => {
 };
 
 /**
- * Vite plugin that writes the current git info to a TypeScript file at startup.
- * The hook imports this file directly — no fetch, no declare const, no "unknown".
- * Works in both dev and production builds.
+ * Vite plugin that calls scripts/generate-git-info.mjs at startup.
+ * - `config()` fires for BOTH `vite` (dev) and `vite build` (production).
+ * - `prebuild` npm script also calls the same script so tsc gets the file first.
+ * - Exposes `/__git_info__` endpoint in dev for live badge refresh.
  */
 const gitInfoPlugin = () => {
-  const generateFile = () => {
-    const info = getGitReleaseInfo();
-    const outPath = resolve(__dirname, 'src/components/common/git-release/git-info.generated.ts');
-
-    const content = `// AUTO-GENERATED — do not edit by hand. Updated by vite.config.ts on every dev start / build.
-// Last generated: ${new Date().toISOString()}
-import type { GitReleaseInfo } from './git-release.types';
-
-const GIT_INFO: GitReleaseInfo = ${JSON.stringify(info, null, 2)};
-
-export default GIT_INFO;
-`;
-    writeFileSync(outPath, content, 'utf-8');
-    console.log(`\n[git-info] ✓ Generated commit info: ${info.branch}@${info.commitShort} (${info.commitDate})\n`);
-  };
-
   return {
     name: 'git-info-generator',
-    // `config` hook fires synchronously for BOTH `vite` (dev) and `vite build` (production)
+    // Runs synchronously for both dev server start AND production build
     config() {
-      generateFile();
+      const scriptPath = resolve(__dirname, 'scripts/generate-git-info.mjs');
+      try {
+        execSync(`node "${scriptPath}"`, {
+          stdio: 'inherit',
+          cwd: __dirname,
+        });
+      } catch {
+        // If script fails, warn but don't crash the dev server
+        console.warn('[git-info] ⚠ Could not generate git-info.generated.ts');
+      }
     },
     configureServer(server: ViteDevServer) {
-      // Also expose a live endpoint so the badge can refresh after new commits
-      // without restarting the dev server — just hit the endpoint and re-render
+      // Live endpoint — fetches fresh git info on every request
+      // Badge auto-calls this on mount so new commits appear after page refresh
       server.middlewares.use('/__git_info__', (_req, res) => {
         const info = getGitReleaseInfo();
         res.setHeader('Content-Type', 'application/json');
