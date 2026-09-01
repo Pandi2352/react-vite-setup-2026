@@ -5,4 +5,7 @@ export * from './navbar/breadcrumbs';
 export * from './navbar/command-palette';
 export * from './navbar/notification-menu';
 export * from './navbar/user-menu';
-export * from './sidebar/sidebar';
+export * from './sidebar';
+export * from './right-sidebar';
+
+

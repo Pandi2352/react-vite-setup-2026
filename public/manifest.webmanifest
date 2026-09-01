@@ -1,0 +1,17 @@
+{
+  "name": "Forge Enterprise React Frontend",
+  "short_name": "Forge UI",
+  "description": "Enterprise-Grade React 19 + Vite 8 + TypeScript Starter Foundation with 30 Color Schemes, AI Copilot, and MCP Tools",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#B4121B",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32 48x48 72x72 96x96 128x128 256x256",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

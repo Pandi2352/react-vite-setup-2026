@@ -24,25 +24,26 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
     <div className="w-full">
       {hasChildren ? (
         <button
+          type="button"
           onClick={() => toggleSubmenu(item.id)}
           className={cn(
-            'w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-normal transition-colors cursor-pointer',
+            'group w-full flex items-center justify-between px-3 py-2 text-xs transition-colors duration-150 cursor-pointer',
             isChildActive
-              ? 'bg-primary/10 text-primary font-medium'
-              : 'text-muted-foreground hover:bg-accent/80 hover:text-foreground',
+              ? 'text-primary font-semibold'
+              : 'text-muted-foreground font-normal hover:text-primary',
             sidebarCollapsed && 'w-10 h-10 p-0 justify-center mx-auto'
           )}
           aria-expanded={isExpanded}
         >
           <div className="flex items-center gap-2.5 min-w-0 justify-center">
-            <div className="shrink-0">{item.icon}</div>
-            {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+            <div className="shrink-0 transition-transform duration-150 group-hover:scale-110">{item.icon}</div>
+            {!sidebarCollapsed && <span className="truncate transition-colors">{item.label}</span>}
           </div>
           {!sidebarCollapsed && (
             <ChevronDown
               className={cn(
-                'h-3.5 w-3.5 shrink-0 transition-transform duration-200 text-muted-foreground',
-                isExpanded && 'rotate-180 text-primary'
+                'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
+                isExpanded ? 'rotate-180 text-primary' : 'text-muted-foreground group-hover:text-primary'
               )}
             />
           )}
@@ -53,13 +54,14 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
           target="_blank"
           rel="noopener noreferrer"
           className={cn(
-            'flex items-center justify-between px-3 py-2 rounded-md text-xs font-normal text-muted-foreground hover:bg-accent/80 hover:text-foreground transition-colors',
+            'group flex items-center justify-between px-3 py-2 text-xs transition-colors duration-150',
+            'text-muted-foreground font-normal hover:text-primary',
             sidebarCollapsed && 'w-10 h-10 p-0 justify-center mx-auto'
           )}
         >
           <div className="flex items-center gap-2.5 min-w-0 justify-center">
-            <div className="shrink-0">{item.icon}</div>
-            {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+            <div className="shrink-0 transition-transform duration-150 group-hover:scale-110">{item.icon}</div>
+            {!sidebarCollapsed && <span className="truncate transition-colors">{item.label}</span>}
           </div>
           {!sidebarCollapsed && (
             <div className="flex items-center gap-1">
@@ -68,7 +70,7 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
                   {item.badge.text}
                 </Badge>
               )}
-              <ExternalLink className="h-3 w-3 shrink-0 text-muted-foreground/60" />
+              <ExternalLink className="h-3 w-3 shrink-0 text-muted-foreground/60 group-hover:text-primary transition-colors" />
             </div>
           )}
         </a>
@@ -78,10 +80,10 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
           onClick={() => setMobileDrawerOpen(false)}
           className={({ isActive }) =>
             cn(
-              'flex items-center justify-between px-3 py-2 rounded-md text-xs transition-all duration-200',
+              'group flex items-center justify-between px-3 py-2 text-xs transition-colors duration-150',
               isActive
-                ? 'bg-primary/10 text-primary font-medium shadow-2xs'
-                : 'text-muted-foreground font-normal hover:bg-accent/80 hover:text-foreground',
+                ? 'text-primary font-semibold'
+                : 'text-muted-foreground font-normal hover:text-primary',
               sidebarCollapsed && 'w-10 h-10 p-0 justify-center mx-auto'
             )
           }
@@ -89,13 +91,16 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
           {({ isActive }) => (
             <>
               <div className="flex items-center gap-2.5 min-w-0 justify-center">
-                <div className="shrink-0">{item.icon}</div>
-                {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+                <div className="shrink-0 transition-transform duration-150 group-hover:scale-110">{item.icon}</div>
+                {!sidebarCollapsed && <span className="truncate transition-colors">{item.label}</span>}
               </div>
               {!sidebarCollapsed && item.badge && (
                 <Badge
                   variant={item.badge.variant || 'default'}
-                  className={cn('text-[9px] px-1.5 py-0 font-normal', isActive && 'bg-primary/20 text-primary')}
+                  className={cn(
+                    'text-[9px] px-1.5 py-0 font-normal transition-colors',
+                    isActive ? 'text-primary font-semibold' : 'text-muted-foreground'
+                  )}
                 >
                   {item.badge.text}
                 </Badge>
@@ -105,7 +110,7 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
         </NavLink>
       )}
 
-      {/* Render Submenu Children without vertical line */}
+      {/* Render Submenu Children */}
       {hasChildren && isExpanded && !sidebarCollapsed && (
         <div className="pl-3 space-y-1 mt-1 animate-in slide-in-from-left-2">
           {item.children?.map((child) => (
@@ -116,7 +121,8 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
     </div>
   );
 
-  const wrappedWithTooltip = sidebarCollapsed ? (
+  // Show tooltip popup ONLY when collapsed (icon-only mode)
+  const contentElement = sidebarCollapsed ? (
     <Tooltip content={item.label} position="right" className="w-full py-0.5">
       {menuItemElement}
     </Tooltip>
@@ -125,8 +131,8 @@ export const SidebarMenuItem: React.FC<{ item: NavItemConfig }> = ({ item }) => 
   );
 
   if (item.permission) {
-    return <PermissionGuard permission={item.permission as any}>{wrappedWithTooltip}</PermissionGuard>;
+    return <PermissionGuard permission={item.permission as any}>{contentElement}</PermissionGuard>;
   }
 
-  return wrappedWithTooltip;
+  return contentElement;
 };

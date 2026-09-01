@@ -28,13 +28,13 @@ export const UserMenu: React.FC = () => {
     <div ref={menuRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 p-1.5 rounded-full hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+        className="group flex items-center gap-2.5 p-1 transition-colors cursor-pointer focus:outline-none"
         aria-label="User Profile Menu"
         aria-expanded={isOpen}
       >
         <Avatar name={user.name} size="sm" />
         <div className="hidden lg:flex flex-col text-left leading-tight max-w-[120px]">
-          <span className="text-xs font-semibold text-foreground truncate">{user.name}</span>
+          <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">{user.name}</span>
           <span className="text-[10px] text-muted-foreground truncate">{user.role}</span>
         </div>
       </button>

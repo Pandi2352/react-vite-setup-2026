@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X, Palette, Type, Sun, Moon, Laptop, Check, Search, RotateCcw } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
+import { useUIStore } from '@/store/ui-store';
+import { RightResizeHandle } from '@/components/layout/right-sidebar/right-resize-handle';
 import { COLOR_SCHEMES_CATALOG } from '@/lib/theme';
 import { GOOGLE_FONTS_LIST } from '@/lib/fonts';
 import { Button } from '@/components/ui/button';
@@ -19,6 +21,8 @@ export const ThemeCustomizerDrawer: React.FC = () => {
     isCustomizerOpen,
     setIsCustomizerOpen,
   } = useTheme();
+
+  const { rightPanelWidth, isRightResizing } = useUIStore();
 
   const [activeTab, setActiveTab] = useState<'colors' | 'fonts' | 'mode'>('colors');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,7 +54,14 @@ export const ThemeCustomizerDrawer: React.FC = () => {
       />
 
       {/* Right Drawer Content Panel */}
-      <div className="relative w-full max-w-md h-full bg-card border-l border-border flex flex-col z-10 animate-in slide-in-from-right duration-300">
+      <div
+        style={{ width: `${rightPanelWidth}px` }}
+        className={cn(
+          'relative w-full max-w-[90vw] h-full bg-card/95 backdrop-blur-md border-l border-border flex flex-col z-10 animate-in slide-in-from-right overflow-visible',
+          isRightResizing ? 'transition-none' : 'transition-[width] duration-300 ease-in-out'
+        )}
+      >
+        <RightResizeHandle />
         {/* Drawer Header */}
         <div className="flex items-center justify-between p-4 border-b border-border bg-card">
           <div className="flex items-center gap-2">

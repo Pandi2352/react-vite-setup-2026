@@ -3,6 +3,7 @@ import { Bell, CheckCheck, Trash2, Info, AlertTriangle, CheckCircle2 } from 'luc
 import { useUIStore } from '@/store/ui-store';
 import { useNotificationStore } from '@/store/notification-store';
 import { Button } from '@/components/ui/button';
+import { Tooltip } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 export const NotificationMenu: React.FC = () => {
@@ -24,21 +25,27 @@ export const NotificationMenu: React.FC = () => {
 
   return (
     <div ref={menuRef} className="relative">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={toggleNotifications}
-        className="h-9 w-9 p-0 rounded-full relative"
-        aria-label="Notifications"
-        aria-expanded={notificationsOpen}
-      >
-        <Bell className="h-4 w-4" />
-        {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground animate-pulse">
-            {unreadCount > 99 ? '99+' : unreadCount}
-          </span>
-        )}
-      </Button>
+      <Tooltip content="Notifications" position="bottom">
+        <button
+          type="button"
+          onClick={toggleNotifications}
+          className={cn(
+            'group relative flex h-9 w-9 items-center justify-center transition-colors duration-150 cursor-pointer',
+            notificationsOpen
+              ? 'text-primary font-semibold'
+              : 'text-muted-foreground hover:text-primary'
+          )}
+          aria-label="Notifications"
+          aria-expanded={notificationsOpen}
+        >
+          <Bell className="h-5 w-5 transition-colors" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 flex h-3.5 min-w-[14px] px-1 items-center justify-center rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground">
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
+        </button>
+      </Tooltip>
 
       {/* Notification Dropdown Popover */}
       {notificationsOpen && (

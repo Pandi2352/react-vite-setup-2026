@@ -96,9 +96,11 @@ export function applyColorScheme(paletteId: string) {
 
   const primaryHsl = hexToHslStr(scheme.primary);
   const ringHsl = hexToHslStr(scheme.accent || scheme.primary);
+  const accentHsl = hexToHslStr(scheme.accent || scheme.primary);
 
   root.style.setProperty('--primary', primaryHsl);
   root.style.setProperty('--ring', ringHsl);
+  root.style.setProperty('--accent', accentHsl);
 }
 
 export function applyThemeToDocument(themeMode: ThemeMode): ResolvedTheme {
